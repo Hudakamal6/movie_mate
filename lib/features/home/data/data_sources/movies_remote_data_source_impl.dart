@@ -14,9 +14,10 @@ class MoviesRemoteDataSourceImpl implements MoviesRemoteDataSource {
   MoviesRemoteDataSourceImpl({required this.dio});
 
   @override
-  Future<MoviesResponseEntity> getMovies() async {
+  Future<MoviesResponseEntity> getMovies(int pageNum) async {
     try {
-      final response = await dio.get(Constants.getMoviesListEndpoint);
+      final response =
+          await dio.get(Constants.getMoviesListEndpoint + pageNum.toString());
       if (response.statusCode == 200 || response.statusCode == 201) {
         return MoviesResponseModel.fromJson(response.data);
       } else {
@@ -37,6 +38,25 @@ class MoviesRemoteDataSourceImpl implements MoviesRemoteDataSource {
           await dio.get(Constants.getMovieDetailsEndpoint + movieId.toString());
       if (response.statusCode == 200 || response.statusCode == 201) {
         return MovieModel.fromJson(response.data);
+      } else {
+        final message = response.data['message'] ?? 'Unknown error occurred';
+        throw ServerFailure('Unexpected error: $message');
+      }
+    } on DioException {
+      rethrow;
+    } catch (e) {
+      throw Exception('Unexpected error: $e');
+    }
+  }
+
+  @override
+  Future<MoviesResponseEntity> searchForMovieByMovieName(
+      String movieName) async {
+    try {
+      final response =
+          await dio.get(Constants.getMovieByNameEndpoint + movieName);
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        return MoviesResponseModel.fromJson(response.data);
       } else {
         final message = response.data['message'] ?? 'Unknown error occurred';
         throw ServerFailure('Unexpected error: $message');

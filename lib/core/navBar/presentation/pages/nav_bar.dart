@@ -9,9 +9,9 @@ import '../../../theme/color_manager.dart';
 import '../manager/nav_bar_cubit.dart';
 
 class NavBarScreen extends StatelessWidget {
-  final List<Widget> screens = [
-    const HomeScreen(),
-    const FavouriteScreen(),
+  final List<Widget> screens = const [
+    HomeScreen(),
+    FavouriteScreen(),
   ];
 
   @override
@@ -20,10 +20,13 @@ class NavBarScreen extends StatelessWidget {
       builder: (context, index) {
         return Scaffold(
           extendBody: true,
-          body: screens[index],
+          body: IndexedStack(
+            index: index,
+            children: screens,
+          ),
           bottomNavigationBar: Container(
             decoration: BoxDecoration(
-              color: ColorManager.darkSurface, // dark background for nav bar
+              color: ColorManager.darkSurface,
               borderRadius: BorderRadius.circular(16.r),
               boxShadow: [
                 BoxShadow(
@@ -41,7 +44,6 @@ class NavBarScreen extends StatelessWidget {
                 currentIndex: index,
                 onTap: (i) => context.read<NavBarCubit>().changeTab(i),
                 selectedItemColor: ColorManager.darkAccent,
-                // Netflix red
                 unselectedItemColor: ColorManager.darkSecondaryText,
                 selectedFontSize: 11.sp,
                 unselectedFontSize: 11.sp,

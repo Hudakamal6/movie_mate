@@ -9,7 +9,7 @@ class GetMoviesUseCase {
 
   GetMoviesUseCase({required this.repo});
 
-  Future<Either<Failure, MoviesResponseEntity>> getMovies() async {
-    return await repo.getMovies();
+  Future<Either<Failure, MoviesResponseEntity>> getMovies(int pageNum) async {
+    return await repo.getMovies(pageNum);
   }
 }
