@@ -1,17 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:movie_mate_app/core/app_routing/app_route_generator.dart';
+import '../../../../../core/constants/constants.dart';
 import '../../../../../core/theme/color_manager.dart';
 import '../../pages/movie_details_screen.dart';
 
 class MovieCard extends StatelessWidget {
-  final String posterPath;
+  final String? image;
   final String title;
   final String releaseDate;
 
   const MovieCard({
     super.key,
-    required this.posterPath,
+    required this.image,
     required this.title,
     required this.releaseDate,
   });
@@ -36,17 +37,25 @@ class MovieCard extends StatelessWidget {
           // Poster
           ClipRRect(
             borderRadius: BorderRadius.circular(50.r),
-            child: Image.network(
-              posterPath,
-              height: 150.h,
+            child:
+            image == null
+                ? Container(
+              height: 220.h,
+              color: Colors.grey.shade800,
+              child:  Icon(Icons.broken_image, color: Colors.white54, size: 160.h,),
+            )
+                : Image.network(
+              image!,
               width: double.infinity,
-              fit: BoxFit.cover,
-              errorBuilder: (context, error, stackTrace) => Container(
-                height: 150.h,
-                color: Colors.grey.shade900,
+              height: 220.h,
+              fit: BoxFit.contain,
+              errorBuilder: (context, _, __) => Container(
+                height: 220.h,
+                color: Colors.grey.shade800,
                 child: const Icon(Icons.broken_image, color: Colors.white54),
               ),
-            ),
+            )
+            ,
           ),
 
           SizedBox(height: 8.h),

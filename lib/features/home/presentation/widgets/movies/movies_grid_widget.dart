@@ -84,7 +84,9 @@ class _MoviesGridState extends State<MoviesGrid> {
                 },
                 child: MovieCard(
                   key: ValueKey(movie.movieId),
-                  posterPath: Constants.imageBaseUrl + movie.movieImage,
+                  image: movie.movieImage != null
+                      ? Constants.imageBaseUrl + movie.movieImage!
+                      : null,
                   title: movie.movieTitle,
                   releaseDate: movie.movieReleaseDate,
                 ),

@@ -82,7 +82,11 @@ class MoviesCubit extends Cubit<MoviesState> {
           await searchByMovieNameUseCase.searchForMovieByMovieName(query);
 
       result.fold(
-        (failure) => emit(ErrorState(failure.message)),
+        (failure) {
+          print("error");
+          print(failure.message);
+          emit(ErrorState(failure.message));
+        },
         (moviesPage) {
           _searchResults.addAll(moviesPage.moviesList);
           emit(SuccessState<List<MovieEntity>>(

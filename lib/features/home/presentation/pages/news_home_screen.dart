@@ -3,7 +3,7 @@
 // import 'package:flutter_bloc/flutter_bloc.dart';
 // import 'package:flutter_screenutil/flutter_screenutil.dart';
 // import '../../../../core/theme/color_manager.dart';
-// import '../manager/news/movies_cubit.dart';
+// import '../manager/news/movie_details_cubit.dart';
 // import '../widgets/articleCard/movie_card.dart';
 //
 // import '../widgets/articlesScreenComponents/categories_list_widget.dart';

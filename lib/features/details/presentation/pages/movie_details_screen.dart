@@ -1,25 +1,27 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:movie_mate_app/core/constants/constants.dart';
+import 'package:movie_mate_app/features/details/presentation/manager/movies/movie_details_cubit.dart';
 import 'package:movie_mate_app/features/home/presentation/manager/movies/movies_cubit.dart';
 import 'package:movie_mate_app/features/home/presentation/widgets/movieDetails/fav_button_widget.dart';
 import '../../../../../core/theme/color_manager.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../domain/entities/movie_entity.dart';
+import '../../../home/domain/entities/movie_entity.dart';
+
 
 class MovieDetailsSheet extends StatelessWidget {
   const MovieDetailsSheet({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<MoviesCubit, MoviesState>(
+    return BlocBuilder<MovieDetailsCubit, MovieDetailsState>(
       builder: (context, state) {
-        if (state is LoadingState) {
+        if (state is GetMovieDetailsLoading) {
           return const Center(child: CircularProgressIndicator());
         }
 
-        if (state is ErrorState) {
+        if (state is GetMovieDetailsError) {
           return Center(
             child: Text(
               state.error,
@@ -28,8 +30,8 @@ class MovieDetailsSheet extends StatelessWidget {
           );
         }
 
-        if (state is SuccessState<MovieEntity>) {
-          final movie = state.data;
+        if (state is GetMovieDetailsSuccess) {
+          final movie = state.movie;
 
           return DraggableScrollableSheet(
             expand: false,

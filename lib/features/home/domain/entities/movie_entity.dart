@@ -2,7 +2,7 @@ class MovieEntity {
   final int movieId;
   final String movieTitle;
   final String movieOverView;
-  final String movieImage;
+  final String? movieImage;
   final String movieReleaseDate;
   final double movieRate;
   final int movieVoteCount;
@@ -11,7 +11,7 @@ class MovieEntity {
       {required this.movieId,
       required this.movieTitle,
       required this.movieOverView,
-      required this.movieImage,
+       this.movieImage,
       required this.movieReleaseDate,
       required this.movieRate,
       required this.movieVoteCount});
