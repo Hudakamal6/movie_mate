@@ -1,5 +1,4 @@
 import 'package:get_it/get_it.dart';
-import 'package:movie_mate_app/features/home/domain/use_cases/get_movie_details_use_case.dart';
 import 'package:movie_mate_app/features/home/domain/use_cases/serach_by_movie_name_use_case.dart';
 import 'package:movie_mate_app/features/home/presentation/manager/movies/movies_cubit.dart';
 import '../../../core/extensions/get_it_extension.dart';
@@ -14,11 +13,10 @@ class HomeServices {
 
   Future<void> initDi() async {
     sl.registerLazySingletonSafely(() => GetMoviesUseCase(repo: sl()));
-    sl.registerLazySingletonSafely(() => GetMovieDetailsUseCase(repo: sl()));
     sl.registerLazySingletonSafely(() => SearchByMovieNameUseCase(repo: sl()));
 
     sl.registerFactorySafely(() =>
-        MoviesCubit(getMoviesUseCase: sl(), getMovieDetailsUseCase: sl(), searchByMovieNameUseCase: sl()));
+        MoviesCubit(getMoviesUseCase: sl(), searchByMovieNameUseCase: sl()));
 
     sl.registerLazySingletonSafely<MoviesRemoteDataSource>(
       () => MoviesRemoteDataSourceImpl(dio: sl()),

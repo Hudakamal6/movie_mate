@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-import '../../../../../core/helpers/helpers_functions.dart';
 import '../../../../../core/theme/color_manager.dart';
 
 class CustomArticleAppBar extends StatelessWidget implements PreferredSizeWidget {
@@ -34,11 +33,7 @@ class CustomArticleAppBar extends StatelessWidget implements PreferredSizeWidget
       actions: [
         IconButton(
           onPressed: () {
-            // HelpersFunctions.checkCurrentSelectedCategoryIndex(
-            //   context.read<CategoryCubit>().selectedIndex,
-            //   context,
-            //   context.read<CategoryCubit>().state.selectedCategory,
-            // );
+
           },
           icon: const Icon(
             Icons.dark_mode,

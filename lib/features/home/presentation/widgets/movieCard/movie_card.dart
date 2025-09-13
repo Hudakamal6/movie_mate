@@ -3,7 +3,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:movie_mate_app/core/app_routing/app_route_generator.dart';
 import '../../../../../core/constants/constants.dart';
 import '../../../../../core/theme/color_manager.dart';
-import '../../pages/movie_details_screen.dart';
 
 class MovieCard extends StatelessWidget {
   final String? image;
@@ -37,25 +36,28 @@ class MovieCard extends StatelessWidget {
           // Poster
           ClipRRect(
             borderRadius: BorderRadius.circular(50.r),
-            child:
-            image == null
+            child: image == null
                 ? Container(
-              height: 220.h,
-              color: Colors.grey.shade800,
-              child:  Icon(Icons.broken_image, color: Colors.white54, size: 160.h,),
-            )
+                    height: 220.h,
+                    color: Colors.grey.shade800,
+                    child: Icon(
+                      Icons.broken_image,
+                      color: Colors.white54,
+                      size: 160.h,
+                    ),
+                  )
                 : Image.network(
-              image!,
-              width: double.infinity,
-              height: 220.h,
-              fit: BoxFit.contain,
-              errorBuilder: (context, _, __) => Container(
-                height: 220.h,
-                color: Colors.grey.shade800,
-                child: const Icon(Icons.broken_image, color: Colors.white54),
-              ),
-            )
-            ,
+                    image!,
+                    width: double.infinity,
+                    height: 220.h,
+                    fit: BoxFit.contain,
+                    errorBuilder: (context, _, __) => Container(
+                      height: 220.h,
+                      color: Colors.grey.shade800,
+                      child:
+                          const Icon(Icons.broken_image, color: Colors.white54),
+                    ),
+                  ),
           ),
 
           SizedBox(height: 8.h),

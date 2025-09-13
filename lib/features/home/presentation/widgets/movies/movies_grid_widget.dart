@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:movie_mate_app/core/constants/constants.dart';
+import 'package:movie_mate_app/features/details/presentation/manager/movies/movie_details_cubit.dart';
 import 'package:movie_mate_app/features/home/presentation/manager/movies/movies_cubit.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 
+import '../../../../details/presentation/pages/movie_details_screen.dart';
 import '../../../domain/entities/movie_entity.dart';
-import '../../pages/movie_details_screen.dart';
 import '../movieCard/movie_card.dart';
 
 class MoviesGrid extends StatefulWidget {
@@ -69,14 +70,14 @@ class _MoviesGridState extends State<MoviesGrid> {
               final movie = movies[index];
               return GestureDetector(
                 onTap: () {
-                  context.read<MoviesCubit>().getMovieDetails(movie.movieId);
+                  context.read<MovieDetailsCubit>().getMovieDetails(movie.movieId);
                   showModalBottomSheet(
                     context: context,
                     isScrollControlled: true,
                     backgroundColor: Colors.transparent,
                     builder: (_) {
                       return BlocProvider.value(
-                        value: context.read<MoviesCubit>(),
+                        value: context.read<MovieDetailsCubit>(),
                         child: const MovieDetailsSheet(),
                       );
                     },

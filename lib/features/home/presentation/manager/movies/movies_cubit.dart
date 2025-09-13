@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
-import 'package:movie_mate_app/features/home/domain/use_cases/get_movie_details_use_case.dart';
 import '../../../domain/entities/movie_entity.dart';
 import '../../../domain/use_cases/get_movies_use_case.dart';
 import '../../../domain/use_cases/serach_by_movie_name_use_case.dart';
@@ -10,7 +9,6 @@ part 'movies_state.dart';
 
 class MoviesCubit extends Cubit<MoviesState> {
   final GetMoviesUseCase getMoviesUseCase;
-  final GetMovieDetailsUseCase getMovieDetailsUseCase;
   final SearchByMovieNameUseCase searchByMovieNameUseCase;
 
   int _currentPage = 0;
@@ -24,7 +22,6 @@ class MoviesCubit extends Cubit<MoviesState> {
 
   MoviesCubit({
     required this.getMoviesUseCase,
-    required this.getMovieDetailsUseCase,
     required this.searchByMovieNameUseCase,
   }) : super(MoviesInitial());
 
@@ -96,16 +93,7 @@ class MoviesCubit extends Cubit<MoviesState> {
     });
   }
 
-  Future<void> getMovieDetails(int movieId) async {
-    emit(LoadingState());
 
-    final result = await getMovieDetailsUseCase.getMovies(movieId);
-
-    result.fold(
-      (failure) => emit(ErrorState(failure.message)),
-      (movie) => emit(SuccessState<MovieEntity>(movie)),
-    );
-  }
 
   @override
   Future<void> close() {
