@@ -186,13 +186,8 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - Flutter team for the amazing framework
 - All the open-source package contributors
 
-## Support
 
-If you encounter any issues or have questions, please:
-1. Check the existing issues
-2. Create a new issue with detailed information
-3. Contact the development team
 
 ---
-
+✍️ Author Huda kamal https://www.linkedin.com/in/huda-kamal-9084ab275?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=ios_app | https://github.com/Hudakamal6
 Made with ❤️ using Flutter
