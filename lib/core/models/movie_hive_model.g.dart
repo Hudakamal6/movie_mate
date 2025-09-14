@@ -20,7 +20,7 @@ class MovieHiveModelAdapter extends TypeAdapter<MovieHiveModel> {
       movieId: fields[0] as int,
       movieTitle: fields[1] as String,
       movieOverView: fields[2] as String,
-      movieImage: fields[3] as String,
+      movieImage: fields[3] as Uint8List?,
       movieReleaseDate: fields[4] as String,
       movieRate: fields[5] as double,
       movieVoteCount: fields[6] as int,

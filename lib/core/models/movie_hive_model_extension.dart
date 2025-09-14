@@ -1,4 +1,5 @@
-import '../../../home/domain/entities/movie_entity.dart';
+import 'dart:typed_data';
+import '../../features/home/domain/entities/movie_entity.dart';
 import 'movie_hive_model.dart';
 
 extension MovieHiveMapper on MovieHiveModel {
@@ -7,7 +8,7 @@ extension MovieHiveMapper on MovieHiveModel {
       movieId: movieId,
       movieTitle: movieTitle,
       movieOverView: movieOverView,
-      movieImage: movieImage,
+      movieImage: null,
       movieReleaseDate: movieReleaseDate,
       movieRate: movieRate,
       movieVoteCount: movieVoteCount,
@@ -16,12 +17,12 @@ extension MovieHiveMapper on MovieHiveModel {
 }
 
 extension MovieEntityMapper on MovieEntity {
-  MovieHiveModel toHiveModel() {
+  MovieHiveModel toHiveModel(Uint8List? imageBytes) {
     return MovieHiveModel(
       movieId: movieId,
       movieTitle: movieTitle,
       movieOverView: movieOverView,
-      movieImage: movieImage!,
+      movieImage: imageBytes, // ✅ now correct type
       movieReleaseDate: movieReleaseDate,
       movieRate: movieRate,
       movieVoteCount: movieVoteCount,

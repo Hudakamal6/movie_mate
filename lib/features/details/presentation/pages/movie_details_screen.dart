@@ -3,12 +3,11 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:movie_mate_app/core/constants/constants.dart';
 import 'package:movie_mate_app/features/details/presentation/manager/movies/movie_details_cubit.dart';
 import 'package:movie_mate_app/features/home/presentation/manager/movies/movies_cubit.dart';
-import 'package:movie_mate_app/features/home/presentation/widgets/movieDetails/fav_button_widget.dart';
 import '../../../../../core/theme/color_manager.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../home/domain/entities/movie_entity.dart';
-
+import '../widgets/movieDetails/fav_button_widget.dart';
 
 class MovieDetailsSheet extends StatelessWidget {
   const MovieDetailsSheet({super.key});
@@ -17,21 +16,21 @@ class MovieDetailsSheet extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<MovieDetailsCubit, MovieDetailsState>(
       builder: (context, state) {
-        if (state is GetMovieDetailsLoading) {
+        if (state is MovieDetailsLoading<MovieEntity>) {
           return const Center(child: CircularProgressIndicator());
         }
 
-        if (state is GetMovieDetailsError) {
+        if (state is MovieDetailsError) {
           return Center(
             child: Text(
-              state.error,
+              state.message,
               style: const TextStyle(color: Colors.red),
             ),
           );
         }
 
-        if (state is GetMovieDetailsSuccess) {
-          final movie = state.movie;
+        if (state is MovieDetailsSuccess<MovieEntity>) {
+          final movie = state.data;
 
           return DraggableScrollableSheet(
             expand: false,
@@ -62,18 +61,17 @@ class MovieDetailsSheet extends StatelessWidget {
                           ),
                         ),
                       ),
-
-                      // Poster header
+                      // Poster
                       ClipRRect(
                         borderRadius: BorderRadius.vertical(
                           top: Radius.circular(24.r),
                         ),
-                        child:
-                        movie.movieImage == null
+                        child: movie.movieImage == null
                             ? Container(
                           height: 220.h,
                           color: Colors.grey.shade800,
-                          child: const Icon(Icons.broken_image, color: Colors.white54),
+                          child: const Icon(Icons.broken_image,
+                              color: Colors.white54),
                         )
                             : Image.network(
                           Constants.imageBaseUrl + movie.movieImage!,
@@ -83,13 +81,12 @@ class MovieDetailsSheet extends StatelessWidget {
                           errorBuilder: (context, _, __) => Container(
                             height: 220.h,
                             color: Colors.grey.shade800,
-                            child: const Icon(Icons.broken_image, color: Colors.white54),
+                            child: const Icon(Icons.broken_image,
+                                color: Colors.white54),
                           ),
-                        )
-                        ,
+                        ),
                       ),
-
-                      // Info Card
+                      // Info
                       Container(
                         padding: EdgeInsets.all(16.w),
                         decoration: BoxDecoration(
@@ -101,7 +98,6 @@ class MovieDetailsSheet extends StatelessWidget {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            // Title & Release Date
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
@@ -114,21 +110,17 @@ class MovieDetailsSheet extends StatelessWidget {
                                       color: ColorManager.darkPrimaryText,
                                       height: 1.2,
                                     ),
-
                                     maxLines: 2,
-                                    overflow: TextOverflow
-                                        .ellipsis, // prevents overflow
+                                    overflow: TextOverflow.ellipsis,
                                   ),
                                 ),
                                 FavButton(
-                                  icon: Icons.favorite_border,
-                                  label: "Like",
-                                  onTap: () {},
+
+                                  movie: movie,
                                 ),
                               ],
                             ),
                             SizedBox(height: 6.h),
-
                             Container(
                               padding: EdgeInsets.symmetric(
                                   horizontal: 5.w, vertical: 2.h),
@@ -144,10 +136,7 @@ class MovieDetailsSheet extends StatelessWidget {
                                 ),
                               ),
                             ),
-
                             SizedBox(height: 12.h),
-
-                            // Rating row
                             Row(
                               children: [
                                 Icon(Icons.star_rounded,
@@ -171,10 +160,7 @@ class MovieDetailsSheet extends StatelessWidget {
                                 ),
                               ],
                             ),
-
                             SizedBox(height: 20.h),
-
-                            // Overview
                             Text(
                               "Overview",
                               style: TextStyle(
@@ -192,7 +178,6 @@ class MovieDetailsSheet extends StatelessWidget {
                                 height: 1.5,
                               ),
                             ),
-
                             SizedBox(height: 24.h),
                           ],
                         ),
@@ -206,6 +191,9 @@ class MovieDetailsSheet extends StatelessWidget {
         }
 
         return const SizedBox.shrink();
+      },
+      buildWhen: (_,current){
+        return current is  MovieDetailsLoading<MovieEntity> || current is MovieDetailsSuccess<MovieEntity>;
       },
     );
   }

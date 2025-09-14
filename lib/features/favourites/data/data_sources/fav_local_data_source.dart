@@ -1,5 +1,5 @@
 import 'package:hive/hive.dart';
-import '../models/movie_hive_model.dart';
+import '../../../../core/models/movie_hive_model.dart';
 
 abstract class FavoritesLocalDataSource {
   Future<void> addToFavorites(MovieHiveModel movie);

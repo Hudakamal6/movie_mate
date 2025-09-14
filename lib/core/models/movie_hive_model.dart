@@ -1,8 +1,9 @@
+import 'dart:typed_data'; // Add this
 import 'package:hive/hive.dart';
 
 part 'movie_hive_model.g.dart';
 
-@HiveType(typeId: 0) 
+@HiveType(typeId: 0)
 class MovieHiveModel extends HiveObject {
   @HiveField(0)
   int movieId;
@@ -14,7 +15,7 @@ class MovieHiveModel extends HiveObject {
   String movieOverView;
 
   @HiveField(3)
-  String movieImage;
+  Uint8List? movieImage; // ✅ store as binary data
 
   @HiveField(4)
   String movieReleaseDate;
@@ -29,7 +30,7 @@ class MovieHiveModel extends HiveObject {
     required this.movieId,
     required this.movieTitle,
     required this.movieOverView,
-    required this.movieImage,
+     this.movieImage,
     required this.movieReleaseDate,
     required this.movieRate,
     required this.movieVoteCount,

@@ -1,6 +1,6 @@
 import 'package:hive/hive.dart';
 
-import '../models/movie_hive_model.dart';
+import '../../../../core/models/movie_hive_model.dart';
 import 'fav_local_data_source.dart';
 
 class FavoritesLocalDataSourceImpl implements FavoritesLocalDataSource {

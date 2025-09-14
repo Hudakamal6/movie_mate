@@ -5,15 +5,22 @@ sealed class MovieDetailsState {}
 
 final class MovieDetailsInitial extends MovieDetailsState {}
 
-final class GetMovieDetailsLoading extends MovieDetailsState {}
+final class MovieDetailsLoading<T> extends MovieDetailsState {}
 
-final class GetMovieDetailsSuccess extends MovieDetailsState {
-  final MovieEntity movie;
-  GetMovieDetailsSuccess({required this.movie});
+final class MovieDetailsSuccess<T> extends MovieDetailsState {
+  final T data;
+
+  MovieDetailsSuccess(this.data);
 }
 
-final class GetMovieDetailsError extends MovieDetailsState {
-  final String error;
-  GetMovieDetailsError(this.error);
+final class MovieDetailsError extends MovieDetailsState {
+  final String message;
+
+  MovieDetailsError(this.message);
 }
 
+final class MovieDetailsFavStatus extends MovieDetailsState {
+  final bool isFav;
+
+  MovieDetailsFavStatus(this.isFav);
+}

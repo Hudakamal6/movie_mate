@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:movie_mate_app/core/app_routing/routes_names.dart';
 import 'package:movie_mate_app/features/details/details.dart';
+import 'package:movie_mate_app/features/favourites/presentation/manager/favorites_cubit.dart';
 import '../../features/Splash/presentation/pages/splash_screen.dart';
 import '../../features/details/presentation/manager/movies/movie_details_cubit.dart';
+import '../../features/favourites/fav_di.dart';
 import '../../features/home/home_di.dart';
 import '../../features/home/presentation/manager/movies/movies_cubit.dart';
 import '../navBar/presentation/manager/nav_bar_cubit.dart';
@@ -23,6 +25,7 @@ class AppRouteGenerator {
       case RoutesNames.home:
         HomeServices().initDi();
         DetailsServices().initDi();
+        FavServices().initDi();
         return _buildPageRoute(
           builder: (_) {
             return MultiBlocProvider(
@@ -33,8 +36,12 @@ class AppRouteGenerator {
                 BlocProvider(
                   create: (_) => sl<MoviesCubit>()..getMovies(),
                 ),
-                BlocProvider(create: (_) => sl<MovieDetailsCubit>()),
-
+                BlocProvider(
+                  create: (_) => sl<MovieDetailsCubit>(),
+                ),
+                BlocProvider(
+                  create: (_) => sl<FavoritesCubit>()..getFavorites(),
+                ),
               ],
               child: NavBarScreen(),
             );
