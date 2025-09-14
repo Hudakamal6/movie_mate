@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:movie_mate_app/core/theme/padding_manager.dart';
+import 'package:movie_mate_app/core/theme/radius_manager.dart';
 
 import '../../../home/domain/entities/movie_entity.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -27,16 +29,13 @@ class MovieDetailsData extends StatelessWidget {
         return Container(
           decoration: BoxDecoration(
             color: theme.colorScheme.background,
-            borderRadius: BorderRadius.vertical(
-              top: Radius.circular(24.r),
-            ),
+            borderRadius: RadiusManager.radius24
           ),
           child: SingleChildScrollView(
             controller: scrollController,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // drag handle
                 Center(
                   child: Container(
                     width: 60.w,
@@ -49,20 +48,15 @@ class MovieDetailsData extends StatelessWidget {
                   ),
                 ),
 
-                // Poster
                 ClipRRect(
-                    borderRadius: BorderRadius.vertical(
-                      top: Radius.circular(24.r),
-                    ),
+                    borderRadius: RadiusManager.radius24,
                     child: MovieGridViewImageWidget(image: movie.movieImage)),
 
                 Container(
-                  padding: EdgeInsets.all(16.w),
+                  padding: PaddingManager.all16,
                   decoration: BoxDecoration(
                     color: theme.colorScheme.surface,
-                    borderRadius: BorderRadius.vertical(
-                      top: Radius.circular(24.r),
-                    ),
+                    borderRadius: RadiusManager.radius24
                   ),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -86,11 +80,10 @@ class MovieDetailsData extends StatelessWidget {
                       ),
                       SizedBox(height: 6.h),
                       Container(
-                        padding: EdgeInsets.symmetric(
-                            horizontal: 5.w, vertical: 2.h),
+                        padding: PaddingManager.all4,
                         decoration: BoxDecoration(
                           color: theme.colorScheme.primary,
-                          borderRadius: BorderRadius.circular(20.r),
+                          borderRadius: RadiusManager.radius24,
                         ),
                         child: Text(
                           "Released on ${movie.movieReleaseDate}",

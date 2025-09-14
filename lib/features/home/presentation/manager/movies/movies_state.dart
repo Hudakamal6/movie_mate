@@ -18,7 +18,7 @@ final class MoviesCachedSuccess extends MoviesState {
 }
 
 final class ErrorState extends MoviesState {
-  final String error;
+  final Failure error;
 
   ErrorState(this.error);
 }

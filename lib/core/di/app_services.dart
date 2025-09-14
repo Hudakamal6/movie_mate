@@ -10,8 +10,6 @@ class AppServices {
   Future<void> init() async {
     sl.registerFactorySafely<NavBarCubit>(() => NavBarCubit());
     sl.registerFactorySafely<ThemeCubit>(() => ThemeCubit());
-    sl.registerLazySingletonSafely(
-      () => NetworkStatus(),
-    );
+
   }
 }

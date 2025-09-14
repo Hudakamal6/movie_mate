@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:movie_mate_app/core/theme/padding_manager.dart';
+import 'package:movie_mate_app/core/theme/radius_manager.dart';
 import '../../../../../core/theme/theme_cubit.dart';
 
 class CustomHomeAppBar extends StatelessWidget implements PreferredSizeWidget {
@@ -21,9 +23,9 @@ class CustomHomeAppBar extends StatelessWidget implements PreferredSizeWidget {
         ),
       ),
       leading: Padding(
-        padding: const EdgeInsets.all(5.0),
+        padding: PaddingManager.all4,
         child: ClipRRect(
-          borderRadius: BorderRadius.circular(16.r),
+          borderRadius: RadiusManager.radius16,
           child: Image.asset(
             'assets/logos/moviematelogo.png',
             fit: BoxFit.contain,

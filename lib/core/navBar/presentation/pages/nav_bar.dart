@@ -45,7 +45,7 @@ class NavBarScreen extends StatelessWidget {
                 onTap: (i) => context.read<NavBarCubit>().changeTab(i),
                 selectedItemColor: Theme.of(context).colorScheme.primary,
                 unselectedItemColor:
-                    Theme.of(context).colorScheme.onSurface.withOpacity(0.6),
+                    Theme.of(context).colorScheme.onSurface,
                 selectedFontSize: 11.sp,
                 unselectedFontSize: 11.sp,
                 type: BottomNavigationBarType.fixed,

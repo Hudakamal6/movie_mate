@@ -17,12 +17,13 @@ class DioClient {
       ..options.receiveTimeout = const Duration(seconds: 10000)
       ..options.responseType = ResponseType.json
       ..options.headers.addAll(
-        {
-          Headers.contentTypeHeader: Headers.jsonContentType,
-          Headers.acceptHeader: Headers.jsonContentType,
-          'Authorization':
-              'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJhMjMwY2FjNTkyNGE3YmY1MjA0NjVmY2FkOGU5ZjAyOCIsIm5iZiI6MTY5NDIwODAzOC4yNTcsInN1YiI6IjY0ZmI5MDI2ZTBjYTdmMDBlYzhhZmE5MyIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.etLgKZS-aVgd0oIK_pcdqjUHL0v4TS9hs77C4QW4DuM',
-        },
+          {
+            Headers.contentTypeHeader: Headers.jsonContentType,
+            Headers.acceptHeader: Headers.jsonContentType,
+              'Authorization':
+                  'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJhMjMwY2FjNTkyNGE3YmY1MjA0NjVmY2FkOGU5ZjAyOCIsIm5iZiI6MTY5NDIwODAzOC4yNTcsInN1YiI6IjY0ZmI5MDI2ZTBjYTdmMDBlYzhhZmE5MyIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.etLgKZS-aVgd0oIK_pcdqjUHL0v4TS9hs77C4QW4DuM',
+            },
+
       )
       ..options.receiveDataWhenStatusError = true
       ..options.validateStatus = (_) {

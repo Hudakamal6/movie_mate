@@ -1,6 +1,7 @@
 import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:movie_mate_app/core/theme/radius_manager.dart';
 import 'package:movie_mate_app/core/widgets/movie_cached_image_widget.dart';
 
 import '../movies/movie_grid_view_image_widget.dart';
@@ -26,7 +27,7 @@ class MovieCard extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
         color: theme.cardColor,
-        borderRadius: BorderRadius.circular(50.r),
+        borderRadius: RadiusManager.radius50,
         boxShadow: [
           BoxShadow(
             color: theme.shadowColor.withOpacity(0.2),
@@ -39,15 +40,17 @@ class MovieCard extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           ClipRRect(
-            borderRadius: BorderRadius.circular(50.r),
-            child:image == null
-                ? MovieCachedImageWidget(cachedMovieImage: cachedMovieImage,)
-
-                : MovieGridViewImageWidget(image: image,) ,
+            borderRadius: RadiusManager.radius50,
+            child: image == null
+                ? MovieCachedImageWidget(
+                    cachedMovieImage: cachedMovieImage,
+                    isCardImage: false,
+                  )
+                : MovieGridViewImageWidget(
+                    image: image,
+                  ),
           ),
-
           SizedBox(height: 8.h),
-
           Text(
             title,
             maxLines: 2,
@@ -59,14 +62,12 @@ class MovieCard extends StatelessWidget {
               height: 1.3,
             ),
           ),
-
           SizedBox(height: 6.h),
-
           Container(
             padding: EdgeInsets.symmetric(horizontal: 5.w, vertical: 2.h),
             decoration: BoxDecoration(
               color: theme.colorScheme.primary,
-              borderRadius: BorderRadius.circular(20.r),
+              borderRadius: RadiusManager.radius24,
             ),
             child: Text(
               releaseDate,

@@ -5,8 +5,9 @@ import 'package:flutter/material.dart';
 
 class MovieCachedImageWidget extends StatelessWidget {
   final Uint8List? cachedMovieImage;
+  final bool isCardImage;
 
-  const MovieCachedImageWidget({super.key, this.cachedMovieImage});
+  const MovieCachedImageWidget({super.key, this.cachedMovieImage,  this.isCardImage = true});
 
   @override
   Widget build(BuildContext context) {
@@ -14,7 +15,8 @@ class MovieCachedImageWidget extends StatelessWidget {
 
     return cachedMovieImage == null
         ? Container(
-      height: 220.h,
+
+      height: isCardImage ? 130.h : 220.h,
       color: theme.colorScheme.surfaceVariant,
       child: Image.asset(
         "assets/placeholders/no_image_png.png",
@@ -24,7 +26,7 @@ class MovieCachedImageWidget extends StatelessWidget {
     )
         : Image.memory(
             cachedMovieImage!,
-            height: 220.h,
+            height: isCardImage ? 130.h : 220.h,
             fit: BoxFit.cover,
             errorBuilder: (context, _, __) => Container(
               width: 100,

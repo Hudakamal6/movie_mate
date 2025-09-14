@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:movie_mate_app/core/theme/padding_manager.dart';
 import 'package:movie_mate_app/core/widgets/empty_data_widget.dart';
 import 'package:movie_mate_app/features/favourites/presentation/manager/favorites_cubit.dart';
 
+import '../../../details/presentation/manager/movies/movie_details_cubit.dart';
+import '../../../details/presentation/pages/movie_details_screen.dart';
 import '../widgets/fav_movie_card_widget.dart';
 
 class FavouriteScreen extends StatelessWidget {
@@ -20,8 +23,15 @@ class FavouriteScreen extends StatelessWidget {
           style: theme.textTheme.titleLarge,
         ),
         backgroundColor: theme.colorScheme.surface,
+        leading: IconButton(
+            onPressed: () {
+              context.read<FavoritesCubit>().getFavorites();
+            },
+            icon: const Icon(Icons.refresh),
+            color: theme.colorScheme.primary,
+            tooltip: 'Refresh'),
       ),
-      body: BlocBuilder<FavoritesCubit, FavoritesState>(
+      body: BlocConsumer<FavoritesCubit, FavoritesState>(
         builder: (context, state) {
           if (state is FavoritesLoading) {
             return const Center(child: CircularProgressIndicator());
@@ -36,25 +46,59 @@ class FavouriteScreen extends StatelessWidget {
               ),
             );
           }
-
+          if (state is EmptyFavState) {
+            return const Center(
+                child: EmptyDataWidget(emptyMessage: "No Favorites Yet 😔"));
+          }
           if (state is FavoritesLoaded) {
             final movies = state.favorites;
-            if (movies.isEmpty) {
-              return const Center(
-                  child: EmptyDataWidget(emptyMessage: "No Favorites Yet 😔"));
-            }
+
             return ListView.builder(
-              padding: const EdgeInsets.all(12),
+              padding: PaddingManager.all12,
               itemCount: movies.length,
               itemBuilder: (context, index) {
                 final movie = movies[index];
 
-                return FavMovieCardWidget(movie: movie);
+                return GestureDetector(
+                  child: FavMovieCardWidget(movie: movie),
+                  onTap: () {
+                    context
+                        .read<MovieDetailsCubit>()
+                        .getMovieDetails(movie.movieId);
+                    context.read<MovieDetailsCubit>().selectedMovieId = movie.movieId ;
+
+                        showModalBottomSheet(
+                      context: context,
+                      isScrollControlled: true,
+                      backgroundColor: Colors.transparent,
+                      builder: (_) {
+                        return BlocProvider.value(
+                          value: context.read<MovieDetailsCubit>(),
+                          child: const MovieDetailsSheet(),
+                        );
+                      },
+                    );
+                  },
+                );
               },
             );
           }
 
           return const SizedBox.shrink();
+        },
+        buildWhen: (_, current) {
+          return current is FavoritesError ||
+              current is FavoritesLoaded ||
+              current is FavoritesLoaded ||
+              current is EmptyFavState;
+        },
+        listener: (context, state) {
+          if (state is FavoriteRemoved) {
+            context.read<FavoritesCubit>().getFavorites();
+          }
+        },
+        listenWhen: (_, current) {
+          return current is FavoriteRemoved;
         },
       ),
     );

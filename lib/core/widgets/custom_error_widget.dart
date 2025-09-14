@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:movie_mate_app/core/error/failure.dart';
+import 'package:movie_mate_app/core/extensions/snack_bar_extension.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:movie_mate_app/core/theme/radius_manager.dart';
 
 class CustomErrorWidget extends StatelessWidget {
   final Failure error;
@@ -12,9 +15,23 @@ class CustomErrorWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        Text(error is NetworkFailure ? "No Internet Connection" : error.message),
-        ElevatedButton(onPressed: onRefresh, child: const Text("Refresh"))
+        ClipRRect(
+            borderRadius: RadiusManager.radius50,
+            child: Image.asset(
+              "assets/placeholders/error.jpg",
+              width: 200.w,
+              height: 200.h,
+            )),
+        SizedBox(
+          height: 10.h,
+        ),
+        Text(error.message),
+        error is NetworkFailure
+            ? ElevatedButton(onPressed: onRefresh, child: const Text("Refresh"))
+            : const SizedBox.shrink()
       ],
     );
   }

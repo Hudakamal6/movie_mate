@@ -1,6 +1,8 @@
 import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
+import 'package:movie_mate_app/core/error/failure.dart';
+import 'package:movie_mate_app/core/extensions/failure_extension.dart';
 import '../../../domain/entities/movie_entity.dart';
 import '../../../domain/use_cases/get_movies_use_case.dart';
 import '../../../domain/use_cases/serach_by_movie_name_use_case.dart';
@@ -15,19 +17,18 @@ class MoviesCubit extends Cubit<MoviesState> {
   int _totalPages = 1;
   bool _isFetching = false;
   final List<MovieEntity> _movies = [];
-   List<MovieEntity> cachedMovies = [];
+  List<MovieEntity> cachedMovies = [];
 
   final List<MovieEntity> _searchResults = [];
-  String _searchQuery = '';
+  String searchQuery = '';
   Timer? _debounce;
 
-  MoviesCubit(
-      {required this.getMoviesUseCase,
-      required this.searchByMovieNameUseCase,
-      })
-      : super(MoviesInitial());
+  MoviesCubit({
+    required this.getMoviesUseCase,
+    required this.searchByMovieNameUseCase,
+  }) : super(MoviesInitial());
 
-  bool get isSearchOrCacheMode => _searchQuery.isNotEmpty;
+  bool get isSearchOrCacheMode => searchQuery.isNotEmpty;
 
   Future<void> getMovies() async {
     _currentPage = 0;
@@ -37,7 +38,9 @@ class MoviesCubit extends Cubit<MoviesState> {
   }
 
   Future<void> getMoviesForNextPage() async {
-    if (_isFetching || _currentPage >= _totalPages || isSearchOrCacheMode) return;
+    if (_isFetching || _currentPage >= _totalPages || isSearchOrCacheMode) {
+      return;
+    }
 
     final nextPage = _currentPage + 1;
     _isFetching = true;
@@ -49,15 +52,18 @@ class MoviesCubit extends Cubit<MoviesState> {
     result.fold(
       (failure) {
         _isFetching = false;
-        emit(ErrorState(failure.message));
+        emit(ErrorState(failure));
       },
-      (moviesPage) {
+      (moviesData) {
         _isFetching = false;
-        _totalPages = moviesPage.totalPages;
+        _totalPages = moviesData.totalPages;
         _currentPage = nextPage;
-        _movies.addAll(moviesPage.moviesList);
-
-        emit(SuccessState<List<MovieEntity>>(List.unmodifiable(_movies)));
+        if (moviesData.moviesList.isNotEmpty) {
+          _movies.addAll(moviesData.moviesList);
+          emit(SuccessState<List<MovieEntity>>(List.unmodifiable(_movies)));
+        } else {
+          emit(EmptyState());
+        }
       },
     );
   }
@@ -65,14 +71,15 @@ class MoviesCubit extends Cubit<MoviesState> {
   void searchMovies(String query) {
     _debounce?.cancel();
     if (query.isEmpty) {
-      _searchQuery = '';
+      searchQuery = '';
       _searchResults.clear();
       emit(SuccessState<List<MovieEntity>>(List.unmodifiable(_movies)));
       return;
     }
 
     _debounce = Timer(const Duration(milliseconds: 500), () async {
-      _searchQuery = query;
+      searchQuery = query;
+
       _searchResults.clear();
       emit(LoadingState());
 
@@ -81,17 +88,20 @@ class MoviesCubit extends Cubit<MoviesState> {
 
       result.fold(
         (failure) {
-          emit(ErrorState(failure.message));
+          emit(ErrorState(failure));
         },
-        (moviesPage) {
-          _searchResults.addAll(moviesPage.moviesList);
-          emit(SuccessState<List<MovieEntity>>(
-              List.unmodifiable(_searchResults)));
+        (movieData) {
+          if (movieData.moviesList.isNotEmpty) {
+            _searchResults.addAll(movieData.moviesList);
+            emit(SuccessState<List<MovieEntity>>(
+                List.unmodifiable(_searchResults)));
+          } else {
+            emit(EmptyState());
+          }
         },
       );
     });
   }
-
 
   @override
   Future<void> close() {

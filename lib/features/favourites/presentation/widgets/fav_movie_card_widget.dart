@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:movie_mate_app/core/theme/padding_manager.dart';
+import 'package:movie_mate_app/core/theme/radius_manager.dart';
 
 import '../../../../core/models/movie_hive_model.dart';
 import '../../../../core/widgets/movie_cached_image_widget.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../manager/favorites_cubit.dart';
 
@@ -19,10 +22,10 @@ class FavMovieCardWidget extends StatelessWidget {
     final theme = Theme.of(context);
 
     return Container(
-      margin: const EdgeInsets.only(bottom: 12),
+      margin:  EdgeInsets.only(bottom: 12.h),
       decoration: BoxDecoration(
         color: theme.colorScheme.surface,
-        borderRadius: BorderRadius.circular(16),
+        borderRadius:RadiusManager.radius16,
         boxShadow: [
           BoxShadow(
             color: theme.shadowColor.withOpacity(0.3),
@@ -35,17 +38,14 @@ class FavMovieCardWidget extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           ClipRRect(
-              borderRadius: const BorderRadius.only(
-                topLeft: Radius.circular(16),
-                bottomLeft: Radius.circular(16),
-              ),
+              borderRadius: RadiusManager.radius16,
               child: MovieCachedImageWidget(cachedMovieImage: movie.movieImage,)
           ),
 
           // Details
           Expanded(
             child: Padding(
-              padding: const EdgeInsets.all(12.0),
+              padding: PaddingManager.all12,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -57,7 +57,7 @@ class FavMovieCardWidget extends StatelessWidget {
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
                   ),
-                  const SizedBox(height: 6),
+                   SizedBox(height: 6.h),
                   Text(
                     "Released: ${movie.movieReleaseDate}",
                     style: theme.textTheme.bodySmall?.copyWith(
@@ -65,15 +65,15 @@ class FavMovieCardWidget extends StatelessWidget {
                           .withOpacity(0.7),
                     ),
                   ),
-                  const SizedBox(height: 8),
+                   SizedBox(height: 8.h),
                   Row(
                     children: [
-                      const Icon(
+                       Icon(
                         Icons.star,
                         color: Colors.amber,
-                        size: 18,
+                        size: 18.sp,
                       ),
-                      const SizedBox(width: 4),
+                       SizedBox(width: 4.w),
                       Text(
                         "${movie.movieRate.toStringAsFixed(1)} / 10",
                         style: theme.textTheme.bodySmall?.copyWith(
@@ -90,6 +90,9 @@ class FavMovieCardWidget extends StatelessWidget {
                           context
                               .read<FavoritesCubit>()
                               .removeFromFavorites(movie.movieId);
+
+
+
                         },
                       ),
                     ],

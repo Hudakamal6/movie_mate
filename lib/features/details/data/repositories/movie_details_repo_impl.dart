@@ -10,7 +10,7 @@ import 'package:dartz/dartz.dart';
 import '../data_sources/movie_details_remote_data_source.dart';
 
 class MovieDetailsRepoImpl implements MovieDetailsRepo {
-  final MoviesRemoteDataSource remoteDataSource;
+  final MovieDetailsRemoteDataSource remoteDataSource;
 
   MovieDetailsRepoImpl({required this.remoteDataSource});
 
@@ -20,8 +20,10 @@ class MovieDetailsRepoImpl implements MovieDetailsRepo {
     try {
       final result = await remoteDataSource.getMovieDetails(movieId);
       return Right(result);
-    }  catch (e) {
-      return Left(ServerFailure(e.toString()));
+    }  on Failure catch (e) {
+      return Left(e);
+    } catch (e) {
+      return Left(ServerFailure('Unexpected error: $e'));
     }
   }
 

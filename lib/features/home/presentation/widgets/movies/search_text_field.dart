@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:movie_mate_app/core/theme/radius_manager.dart';
 
 import '../../manager/movies/movies_cubit.dart';
 
@@ -31,7 +32,7 @@ class _SearchMovieFieldState extends State<SearchMovieField> {
         duration: const Duration(milliseconds: 200),
         decoration: BoxDecoration(
           color: Theme.of(context).colorScheme.surface,
-          borderRadius: BorderRadius.circular(16.r),
+          borderRadius: RadiusManager.radius16,
           boxShadow: [
             BoxShadow(
               color: Theme.of(context)

@@ -21,39 +21,14 @@ class MoviesRemoteDataSourceImpl implements MoviesRemoteDataSource {
       if (response.statusCode == 200 || response.statusCode == 201) {
         return MoviesResponseModel.fromJson(response.data);
       } else {
-        print("statess");
-        final message = response.data['status_message'] ?? 'Unknown error occurred';
-        throw ServerFailure( message);
-      }
-    } on DioException {
-      rethrow;
-
-    } catch (e) {
-      throw Exception('aaaa error: $e');
-    }
-  }
-
-  @override
-  Future<MovieEntity> getMovieDetails(int movieId) async {
-    try {
-      final response =
-          await dio.get(Constants.getMovieDetailsEndpoint + movieId.toString());
-      if (response.statusCode == 200 || response.statusCode == 201) {
-        return MovieModel.fromJson(response.data);
-      } else {
-        final message = response.data['status_message'] ?? 'Unknown error occurred';
+        final message =
+            response.data['status_message'] ?? 'Unknown error occurred';
         throw ServerFailure(message);
       }
-    } on DioException catch(e){
-      if (e.type == DioExceptionType.connectionError ||
-          e.type == DioExceptionType.unknown) {
-
-        throw  const NetworkFailure();
-      }
-      throw const DioFailure();
-    } catch (e) {
-      throw Exception('Unexpected error: $e');
+    } on DioException catch (e) {
+      throw handleDioError(e);
     }
+
   }
 
   @override
@@ -65,13 +40,12 @@ class MoviesRemoteDataSourceImpl implements MoviesRemoteDataSource {
       if (response.statusCode == 200 || response.statusCode == 201) {
         return MoviesResponseModel.fromJson(response.data);
       } else {
-        final message = response.data['message'] ?? 'Unknown error occurred';
-        throw ServerFailure('Unexpected error: $message');
+        final message =
+            response.data['status_message'] ?? 'Unknown error occurred';
+        throw ServerFailure(message);
       }
-    } on DioException {
-      rethrow;
-    } catch (e) {
-      throw Exception('Unexpected error: $e');
+    } on DioException catch (e) {
+      throw handleDioError(e);
     }
   }
 }

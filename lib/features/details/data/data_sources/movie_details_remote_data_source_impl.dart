@@ -11,7 +11,6 @@ class MovieDetailsRemoteDataSourceImpl implements MovieDetailsRemoteDataSource {
 
   MovieDetailsRemoteDataSourceImpl({required this.dio});
 
-
   @override
   Future<MovieEntity> getMovieDetails(int movieId) async {
     try {
@@ -20,15 +19,12 @@ class MovieDetailsRemoteDataSourceImpl implements MovieDetailsRemoteDataSource {
       if (response.statusCode == 200 || response.statusCode == 201) {
         return MovieModel.fromJson(response.data);
       } else {
-        final message = response.data['message'] ?? 'Unknown error occurred';
-        throw ServerFailure('Unexpected error: $message');
+        final message =
+            response.data['statues_message'] ?? 'Unknown error occurred';
+        throw ServerFailure(message);
       }
-    } on DioException {
-      rethrow;
-    } catch (e) {
-      throw Exception('Unexpected error: $e');
+    } on DioException catch (e) {
+      throw handleDioError(e);
     }
   }
-
-
 }

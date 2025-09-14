@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:movie_mate_app/core/constants/constants.dart';
+import 'package:movie_mate_app/core/theme/padding_manager.dart';
+import 'package:movie_mate_app/core/widgets/custom_error_widget.dart';
 import 'package:movie_mate_app/core/widgets/empty_data_widget.dart';
 import 'package:movie_mate_app/features/details/presentation/manager/movies/movie_details_cubit.dart';
 import 'package:movie_mate_app/features/home/presentation/manager/movies/movies_cubit.dart';
@@ -56,55 +58,64 @@ class _MoviesGridState extends State<MoviesGrid> {
         } else if (state is SuccessState<List<MovieEntity>>) {
           final movies = state.data;
           final isSearchMode = context.read<MoviesCubit>().isSearchOrCacheMode;
-
-          return MasonryGridView.builder(
-            controller: isSearchMode ? null : _scrollController,
-            key: const PageStorageKey(Constants.moviesGridViewKey),
-            padding: EdgeInsets.all(20.h).copyWith(bottom: 100.h),
-            gridDelegate: const SliverSimpleGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 2,
-            ),
-            mainAxisSpacing: 10.h,
-            crossAxisSpacing: 15.w,
-            itemCount: movies.length,
-            itemBuilder: (context, index) {
-              final movie = movies[index];
-              return GestureDetector(
-                onTap: () {
-                  context
-                      .read<MovieDetailsCubit>()
-                      .getMovieDetails(movie.movieId);
-                  showModalBottomSheet(
-                    context: context,
-                    isScrollControlled: true,
-                    backgroundColor: Colors.transparent,
-                    builder: (_) {
-                      return BlocProvider.value(
-                        value: context.read<MovieDetailsCubit>(),
-                        child: const MovieDetailsSheet(),
-                      );
-                    },
-                  );
-                },
-                child: MovieCard(
-                  key: ValueKey(movie.movieId),
-                  image: movie.movieImage,
-                  title: movie.movieTitle,
-                  cachedMovieImage: movie.movieByteImage,
-                  releaseDate: movie.movieReleaseDate,
-                ),
-              );
+          return RefreshIndicator(
+            onRefresh: () async {
+              context.read<MoviesCubit>().getMovies();
             },
+            child: MasonryGridView.builder(
+              controller: isSearchMode ? null : _scrollController,
+              key: const PageStorageKey(Constants.moviesGridViewKey),
+              padding: PaddingManager.all12.copyWith(bottom: 100.h),
+              gridDelegate:
+                  const SliverSimpleGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2,
+              ),
+              mainAxisSpacing: 10.h,
+              crossAxisSpacing: 15.w,
+              itemCount: movies.length,
+              itemBuilder: (context, index) {
+                final movie = movies[index];
+                return GestureDetector(
+                  onTap: () {
+                    context
+                        .read<MovieDetailsCubit>()
+                        .getMovieDetails(movie.movieId);
+                    context.read<MovieDetailsCubit>().selectedMovieId =
+                        movie.movieId;
+                    showModalBottomSheet(
+                      context: context,
+                      isScrollControlled: true,
+                      backgroundColor: Colors.transparent,
+                      builder: (_) {
+                        return BlocProvider.value(
+                          value: context.read<MovieDetailsCubit>(),
+                          child: const MovieDetailsSheet(),
+                        );
+                      },
+                    );
+                  },
+                  child: MovieCard(
+                    key: ValueKey(movie.movieId),
+                    image: movie.movieImage,
+                    title: movie.movieTitle,
+                    cachedMovieImage: movie.movieByteImage,
+                    releaseDate: movie.movieReleaseDate,
+                  ),
+                );
+              },
+            ),
           );
         } else if (state is EmptyState) {
           return const EmptyDataWidget(emptyMessage: "No Results Found");
         } else if (state is ErrorState) {
           return Center(
-            child: Text(
-              state.error.toString(),
-              style: Theme.of(context).textTheme.bodyLarge,
-            ),
-          );
+              child: CustomErrorWidget(
+                  error: state.error,
+                  onRefresh: () {
+                    context
+                        .read<MoviesCubit>()
+                        .searchMovies(context.read<MoviesCubit>().searchQuery);
+                  }));
         }
         return const SizedBox.shrink();
       },

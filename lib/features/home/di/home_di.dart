@@ -31,7 +31,7 @@ class HomeServices {
 
     sl.registerLazySingletonSafely<MoviesRepo>(
       () => MoviesRepoImpl(
-          remoteDataSource: sl(), localDataSource: sl(), dio: sl(), networkStatus: sl()),
+          remoteDataSource: sl(), localDataSource: sl(), dio: sl(), ),
     );
   }
 }

@@ -18,6 +18,7 @@ final class FavoritesLoaded extends FavoritesState {
 }
 
 final class FavoriteAdded extends FavoritesState {}
+final class EmptyFavState extends FavoritesState {}
 
 final class FavoriteRemoved extends FavoritesState {}
 

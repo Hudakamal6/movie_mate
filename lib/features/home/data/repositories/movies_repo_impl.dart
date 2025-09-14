@@ -19,13 +19,11 @@ class MoviesRepoImpl implements MoviesRepo {
   final MoviesRemoteDataSource remoteDataSource;
   final MoviesLocalDataSource localDataSource;
   final Dio dio;
-  final NetworkStatus networkStatus;
 
   MoviesRepoImpl({
     required this.remoteDataSource,
     required this.localDataSource,
     required this.dio,
-    required this.networkStatus,
   });
 
   @override
@@ -38,11 +36,11 @@ class MoviesRepoImpl implements MoviesRepo {
       }
 
       return Right(result);
-    } catch (e) {
-      if (!await networkStatus.isConnected) {
+    } on Failure catch (e) {
+      if (e is NetworkFailure) {
         try {
-          final result = await localDataSource.getCachedMovies();
-          final cachedMovies = result.map((m) => m.toEntity()).toList();
+          final cachedResult = await localDataSource.getCachedMovies();
+          final cachedMovies = cachedResult.map((m) => m.toEntity()).toList();
 
           return Right(
             MoviesResponseEntity(
@@ -51,32 +49,34 @@ class MoviesRepoImpl implements MoviesRepo {
               page: 0,
             ),
           );
-        } catch (e) {
-          return Left(CacheFailure(e.toString()));
+        } catch (cacheError) {
+          return Left(
+              CacheFailure('Failed to read cached movies: $cacheError'));
         }
-      } else {
-        return Left(ServerFailure(e.toString()));
       }
+
+      return Left(e);
+    } catch (e) {
+      return Left(ServerFailure('Failed to fetch movies: $e'));
     }
   }
-
-
 
   @override
   Future<Either<Failure, MoviesResponseEntity>> searchForMovieByMovieName(
       String movieName) async {
     try {
       final result =
-      await remoteDataSource.searchForMovieByMovieName(movieName);
-
+          await remoteDataSource.searchForMovieByMovieName(movieName);
       return Right(result);
+    } on Failure catch (e) {
+      return Left(e);
     } catch (e) {
-      return Left(ServerFailure(e.toString()));
+      return Left(ServerFailure('Unexpected error: $e'));
     }
   }
+
   Future<void> _cacheFirstTenMovies(List<MovieEntity> movies) async {
     try {
-
       final futures = movies.map((movie) async {
         Uint8List? imageBytes;
 
@@ -87,8 +87,7 @@ class MoviesRepoImpl implements MoviesRepo {
               options: Options(responseType: ResponseType.bytes),
             );
             imageBytes = Uint8List.fromList(response.data!);
-          } catch (_) {
-          }
+          } catch (_) {}
         }
 
         return movie.toHiveModel(imageBytes);
@@ -96,9 +95,6 @@ class MoviesRepoImpl implements MoviesRepo {
 
       final hiveMovies = await Future.wait(futures);
       await localDataSource.cacheMovies(hiveMovies);
-    } catch (_) {
-    }
+    } catch (_) {}
   }
-
-
 }

@@ -14,9 +14,9 @@ final class MovieDetailsSuccess<T> extends MovieDetailsState {
 }
 
 final class MovieDetailsError extends MovieDetailsState {
-  final String message;
+  final Failure failure;
 
-  MovieDetailsError(this.message);
+  MovieDetailsError(this.failure);
 }
 
 final class MovieDetailsFavStatus extends MovieDetailsState {

@@ -46,7 +46,14 @@ class FavoritesCubit extends Cubit<FavoritesState> {
     final result = await getFavoritesUseCase();
     result.fold(
       (failure) => emit(FavoritesError(failure.message)),
-      (movies) => emit(FavoritesLoaded(movies)),
+      (movies)
+    {
+      if(movies.isNotEmpty){
+        emit(FavoritesLoaded(movies));
+      }else{
+        emit(EmptyFavState());
+      }
+      }
     );
   }
 
