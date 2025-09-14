@@ -1,24 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../core/app_routing/routes_names.dart';
-import '../../../../core/theme/color_manager.dart';
 
 class SplashScreen extends StatefulWidget {
+  const SplashScreen({super.key});
+
   @override
-  _SplashScreenState createState() => _SplashScreenState();
+  State<SplashScreen> createState() => _SplashScreenState();
 }
 
 class _SplashScreenState extends State<SplashScreen>
     with SingleTickerProviderStateMixin {
-  late AnimationController _controller;
-  late Animation<double> _scaleAnimation;
-  late Animation<double> _opacityAnimation;
-  late Animation<double> _textRevealAnimation;
-  late Animation<double> _logoOpacityAnimation;
+  late final AnimationController _controller;
+  late final Animation<double> _scaleAnimation;
+  late final Animation<double> _textRevealAnimation;
+  late final Animation<double> _logoOpacityAnimation;
 
-  String displayedText = "";
-  String fullText = "Movie Mate";
-  bool showLogo = false;
+  final String _fullText = "Movie Mate";
 
   @override
   void initState() {
@@ -33,32 +31,18 @@ class _SplashScreenState extends State<SplashScreen>
       CurvedAnimation(parent: _controller, curve: Curves.easeInOut),
     );
 
-    _opacityAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
-      CurvedAnimation(parent: _controller, curve: Curves.easeIn),
+    _textRevealAnimation = CurvedAnimation(
+      parent: _controller,
+      curve: const Interval(0.0, 0.6, curve: Curves.easeIn),
     );
 
-    _textRevealAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
-      CurvedAnimation(
-          parent: _controller,
-          curve: const Interval(0.0, 0.6, curve: Curves.easeIn)),
+    _logoOpacityAnimation = CurvedAnimation(
+      parent: _controller,
+      curve: const Interval(0.6, 1.0, curve: Curves.easeIn),
     );
 
-    _logoOpacityAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
-      CurvedAnimation(
-          parent: _controller,
-          curve: const Interval(0.6, 1.0, curve: Curves.easeIn)),
-    );
-
-    _controller.addListener(() {
-      final textProgress = _textRevealAnimation.value;
-      final lettersToShow = (fullText.length * textProgress).ceil();
-
-      setState(() {
-        displayedText = fullText.substring(0, lettersToShow);
-        showLogo = textProgress >= 1.0;
-      });
-
-      if (_controller.isCompleted) {
+    _controller.addStatusListener((status) {
+      if (status == AnimationStatus.completed) {
         Navigator.pushReplacementNamed(context, RoutesNames.home);
       }
     });
@@ -74,51 +58,47 @@ class _SplashScreenState extends State<SplashScreen>
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return Scaffold(
-      backgroundColor: ColorManager.darkBackground, // 🌙 dark mode bg
+      backgroundColor: theme.colorScheme.background,
       body: Center(
         child: AnimatedBuilder(
           animation: _controller,
-          builder: (context, child) {
+          builder: (context, _) {
+            final lettersToShow =
+                (_fullText.length * _textRevealAnimation.value).ceil();
+            final displayedText = _fullText.substring(0, lettersToShow);
+
             return Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Opacity(
-                  opacity: _opacityAnimation.value,
-                  child: Transform.scale(
-                    scale: _scaleAnimation.value,
-                    child: Text(
-                      displayedText,
-                      style: TextStyle(
-                        fontSize: 50.sp,
-                        fontWeight: FontWeight.bold,
-                        color: ColorManager.darkAccent, // 🔴 deep red
-                        letterSpacing: 2,
+                ScaleTransition(
+                  scale: _scaleAnimation,
+                  child: Text(
+                    displayedText,
+                    style: theme.textTheme.headlineMedium?.copyWith(
+                      color: theme.colorScheme.primary,
+                      letterSpacing: 2,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+                SizedBox(height: 20.h),
+                FadeTransition(
+                  opacity: _logoOpacityAnimation,
+                  child: ClipOval(
+                    child: Container(
+                      color: theme.colorScheme.surface,
+                      padding: const EdgeInsets.all(20),
+                      child: Image.asset(
+                        "assets/logos/moviematelogo.png",
+                        width: 100.w,
+                        height: 100.h,
                       ),
                     ),
                   ),
                 ),
-                if (showLogo)
-                  Opacity(
-                    opacity: _logoOpacityAnimation.value,
-                    child: Padding(
-                      padding: const EdgeInsets.only(top: 20),
-                      child: ClipOval(
-                        child: Container(
-                          color: ColorManager.darkSurface,
-                          padding: const EdgeInsets.all(20),
-                          child: Text(
-                            "MM", // placeholder logo initials
-                            style: TextStyle(
-                              fontSize: 28.sp,
-                              fontWeight: FontWeight.bold,
-                              color: ColorManager.darkPrimaryText,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
               ],
             );
           },

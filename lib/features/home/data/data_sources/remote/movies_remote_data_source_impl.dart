@@ -1,11 +1,11 @@
 import 'package:dio/dio.dart';
 import 'package:movie_mate_app/features/home/domain/entities/movie_entity.dart';
 
-import '../../../../core/constants/constants.dart';
-import '../../../../core/error/failure.dart';
-import '../../domain/entities/movies_response_entity.dart';
-import '../models/movie_model.dart';
-import '../models/movies_response_model.dart';
+import '../../../../../core/constants/constants.dart';
+import '../../../../../core/error/failure.dart';
+import '../../../domain/entities/movies_response_entity.dart';
+import '../../models/movie_model.dart';
+import '../../models/movies_response_model.dart';
 import 'movies_remote_data_source.dart';
 
 class MoviesRemoteDataSourceImpl implements MoviesRemoteDataSource {
@@ -21,13 +21,15 @@ class MoviesRemoteDataSourceImpl implements MoviesRemoteDataSource {
       if (response.statusCode == 200 || response.statusCode == 201) {
         return MoviesResponseModel.fromJson(response.data);
       } else {
-        final message = response.data['message'] ?? 'Unknown error occurred';
-        throw ServerFailure('Unexpected error: $message');
+        print("statess");
+        final message = response.data['status_message'] ?? 'Unknown error occurred';
+        throw ServerFailure( message);
       }
     } on DioException {
       rethrow;
+
     } catch (e) {
-      throw Exception('Unexpected error: $e');
+      throw Exception('aaaa error: $e');
     }
   }
 
@@ -39,11 +41,16 @@ class MoviesRemoteDataSourceImpl implements MoviesRemoteDataSource {
       if (response.statusCode == 200 || response.statusCode == 201) {
         return MovieModel.fromJson(response.data);
       } else {
-        final message = response.data['message'] ?? 'Unknown error occurred';
-        throw ServerFailure('Unexpected error: $message');
+        final message = response.data['status_message'] ?? 'Unknown error occurred';
+        throw ServerFailure(message);
       }
-    } on DioException {
-      rethrow;
+    } on DioException catch(e){
+      if (e.type == DioExceptionType.connectionError ||
+          e.type == DioExceptionType.unknown) {
+
+        throw  const NetworkFailure();
+      }
+      throw const DioFailure();
     } catch (e) {
       throw Exception('Unexpected error: $e');
     }

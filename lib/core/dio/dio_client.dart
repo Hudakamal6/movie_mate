@@ -29,7 +29,6 @@ class DioClient {
         return true;
       };
 
-//    _addInternetInterceptor();
     _addLogger();
 
     return _instance!;

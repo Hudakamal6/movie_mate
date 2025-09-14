@@ -39,8 +39,6 @@ class MovieDetailsCubit extends Cubit<MovieDetailsState> {
     result.fold(
           (failure) {
             emit(MovieDetailsError(failure.message));
-            print("error");
-            print(failure.message);
           } ,
           (_) {
         emit(MovieDetailsSuccess<bool>(true));

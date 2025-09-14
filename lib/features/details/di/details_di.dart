@@ -2,13 +2,13 @@ import 'package:get_it/get_it.dart';
 import 'package:movie_mate_app/features/details/domain/use_cases/check_is_movie_on_fav_use_case.dart';
 import 'package:movie_mate_app/features/details/domain/use_cases/remove_movie_details_from_fav_use_case.dart';
 import 'package:movie_mate_app/features/details/presentation/manager/movies/movie_details_cubit.dart';
-import '../../../core/extensions/get_it_extension.dart';
-import 'data/data_sources/movie_details_remote_data_source.dart';
-import 'data/data_sources/movies_remote_data_source_impl.dart';
-import 'data/repositories/movie_details_repo_impl.dart';
-import 'domain/repositories/movie_details_repo.dart';
-import 'domain/use_cases/add_movie_details_to_fav_use_case.dart';
-import 'domain/use_cases/get_movie_details_use_case.dart';
+import '../../../../core/extensions/get_it_extension.dart';
+import '../data/data_sources/movie_details_remote_data_source.dart';
+import '../data/data_sources/movies_remote_data_source_impl.dart';
+import '../data/repositories/movie_details_repo_impl.dart';
+import '../domain/repositories/movie_details_repo.dart';
+import '../domain/use_cases/add_movie_details_to_fav_use_case.dart';
+import '../domain/use_cases/get_movie_details_use_case.dart';
 
 class DetailsServices {
   final sl = GetIt.instance;

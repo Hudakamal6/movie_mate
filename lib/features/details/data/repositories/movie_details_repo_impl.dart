@@ -3,7 +3,7 @@
 import 'package:movie_mate_app/features/home/domain/entities/movie_entity.dart';
 
 import '../../../../core/error/failure.dart';
-import '../../../home/data/data_sources/movies_remote_data_source.dart';
+import '../../../home/data/data_sources/remote/movies_remote_data_source.dart';
 import '../../domain/repositories/movie_details_repo.dart';
 import 'package:dartz/dartz.dart';
 

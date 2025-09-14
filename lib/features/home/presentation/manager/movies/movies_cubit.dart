@@ -15,17 +15,19 @@ class MoviesCubit extends Cubit<MoviesState> {
   int _totalPages = 1;
   bool _isFetching = false;
   final List<MovieEntity> _movies = [];
+   List<MovieEntity> cachedMovies = [];
 
   final List<MovieEntity> _searchResults = [];
   String _searchQuery = '';
   Timer? _debounce;
 
-  MoviesCubit({
-    required this.getMoviesUseCase,
-    required this.searchByMovieNameUseCase,
-  }) : super(MoviesInitial());
+  MoviesCubit(
+      {required this.getMoviesUseCase,
+      required this.searchByMovieNameUseCase,
+      })
+      : super(MoviesInitial());
 
-  bool get isSearchMode => _searchQuery.isNotEmpty;
+  bool get isSearchOrCacheMode => _searchQuery.isNotEmpty;
 
   Future<void> getMovies() async {
     _currentPage = 0;
@@ -35,7 +37,7 @@ class MoviesCubit extends Cubit<MoviesState> {
   }
 
   Future<void> getMoviesForNextPage() async {
-    if (_isFetching || _currentPage >= _totalPages || isSearchMode) return;
+    if (_isFetching || _currentPage >= _totalPages || isSearchOrCacheMode) return;
 
     final nextPage = _currentPage + 1;
     _isFetching = true;
@@ -62,7 +64,6 @@ class MoviesCubit extends Cubit<MoviesState> {
 
   void searchMovies(String query) {
     _debounce?.cancel();
-
     if (query.isEmpty) {
       _searchQuery = '';
       _searchResults.clear();
@@ -80,8 +81,6 @@ class MoviesCubit extends Cubit<MoviesState> {
 
       result.fold(
         (failure) {
-          print("error");
-          print(failure.message);
           emit(ErrorState(failure.message));
         },
         (moviesPage) {
@@ -92,7 +91,6 @@ class MoviesCubit extends Cubit<MoviesState> {
       );
     });
   }
-
 
 
   @override

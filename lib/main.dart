@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:movie_mate_app/core/di/hive_services.dart';
+import 'package:movie_mate_app/core/theme/theme_cubit.dart';
 
 import 'core/app_routing/app_route_generator.dart';
 import 'core/app_routing/routes_names.dart';
@@ -10,10 +11,6 @@ import 'core/di/app_services.dart';
 import 'core/dio/dio_service.dart';
 import 'core/helpers/bloc_observer.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:get_it/get_it.dart';
-
-import 'features/home/domain/entities/movie_entity.dart';
-
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -22,18 +19,18 @@ void main() async {
 
   await AppServices().init();
   await DioService().initDi();
-  // Initialize Hive
   await Hive.initFlutter();
-  // await Hive.deleteBoxFromDisk('favoritesBox');
 
-  // Register the adapter ONCE
   await HiveService().init();
 
-
   runApp(ScreenUtilInit(
-    designSize: const Size(375, 812),
-    builder: (context, child) =>  MovieMateApp()
-  ));
+      designSize: const Size(375, 812),
+      builder: (context, child) {
+        return BlocProvider(
+          create: (context) => ThemeCubit(),
+          child: MovieMateApp(),
+        );
+      }));
 }
 
 class MovieMateApp extends StatelessWidget {
@@ -43,11 +40,16 @@ class MovieMateApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'Movie Mate',
-      onGenerateRoute: _appRouter.generateRoute,
-      initialRoute: RoutesNames.splash,
+    return BlocBuilder<ThemeCubit, ThemeData>(
+      builder: (context, theme) {
+        return MaterialApp(
+          debugShowCheckedModeBanner: false,
+          title: 'Movie Mate',
+          theme: theme,
+          onGenerateRoute: _appRouter.generateRoute,
+          initialRoute: RoutesNames.splash,
+        );
+      },
     );
   }
 }

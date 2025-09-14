@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:movie_mate_app/core/constants/constants.dart';
+import 'package:movie_mate_app/core/widgets/empty_data_widget.dart';
 import 'package:movie_mate_app/features/details/presentation/manager/movies/movie_details_cubit.dart';
 import 'package:movie_mate_app/features/home/presentation/manager/movies/movies_cubit.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -29,7 +30,7 @@ class _MoviesGridState extends State<MoviesGrid> {
   void _onScroll() {
     final cubit = context.read<MoviesCubit>();
 
-    if (!cubit.isSearchMode &&
+    if (!cubit.isSearchOrCacheMode &&
         _scrollController.position.pixels >=
             _scrollController.position.maxScrollExtent - 200) {
       cubit.getMoviesForNextPage();
@@ -54,7 +55,7 @@ class _MoviesGridState extends State<MoviesGrid> {
           return const Center(child: CircularProgressIndicator());
         } else if (state is SuccessState<List<MovieEntity>>) {
           final movies = state.data;
-          final isSearchMode = context.read<MoviesCubit>().isSearchMode;
+          final isSearchMode = context.read<MoviesCubit>().isSearchOrCacheMode;
 
           return MasonryGridView.builder(
             controller: isSearchMode ? null : _scrollController,
@@ -70,7 +71,9 @@ class _MoviesGridState extends State<MoviesGrid> {
               final movie = movies[index];
               return GestureDetector(
                 onTap: () {
-                  context.read<MovieDetailsCubit>().getMovieDetails(movie.movieId);
+                  context
+                      .read<MovieDetailsCubit>()
+                      .getMovieDetails(movie.movieId);
                   showModalBottomSheet(
                     context: context,
                     isScrollControlled: true,
@@ -85,19 +88,23 @@ class _MoviesGridState extends State<MoviesGrid> {
                 },
                 child: MovieCard(
                   key: ValueKey(movie.movieId),
-                  image: movie.movieImage != null
-                      ? Constants.imageBaseUrl + movie.movieImage!
-                      : null,
+                  image: movie.movieImage,
                   title: movie.movieTitle,
+                  cachedMovieImage: movie.movieByteImage,
                   releaseDate: movie.movieReleaseDate,
                 ),
               );
             },
           );
         } else if (state is EmptyState) {
-          return const Center(child: Text("No movies found"));
+          return const EmptyDataWidget(emptyMessage: "No Results Found");
         } else if (state is ErrorState) {
-          return Center(child: Text(state.error));
+          return Center(
+            child: Text(
+              state.error.toString(),
+              style: Theme.of(context).textTheme.bodyLarge,
+            ),
+          );
         }
         return const SizedBox.shrink();
       },

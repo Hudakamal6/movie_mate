@@ -11,10 +11,11 @@ extension GetItExtensions on GetIt {
   }
 
   void registerLazySingletonSafely<T extends Object>(
-    FactoryFunc<T> factoryFunc,
-  ) {
-    if (!isRegistered<T>()) {
-      registerLazySingleton<T>(factoryFunc);
+      FactoryFunc<T> factoryFunc, {
+        String? instanceName,
+      }) {
+    if (!isRegistered<T>(instanceName: instanceName)) {
+      registerLazySingleton<T>(factoryFunc, instanceName: instanceName);
     }
   }
 

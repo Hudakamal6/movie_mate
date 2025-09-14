@@ -9,6 +9,7 @@ extension MovieHiveMapper on MovieHiveModel {
       movieTitle: movieTitle,
       movieOverView: movieOverView,
       movieImage: null,
+      movieByteImage: movieImage,
       movieReleaseDate: movieReleaseDate,
       movieRate: movieRate,
       movieVoteCount: movieVoteCount,
@@ -22,7 +23,7 @@ extension MovieEntityMapper on MovieEntity {
       movieId: movieId,
       movieTitle: movieTitle,
       movieOverView: movieOverView,
-      movieImage: imageBytes, // ✅ now correct type
+      movieImage: imageBytes,
       movieReleaseDate: movieReleaseDate,
       movieRate: movieRate,
       movieVoteCount: movieVoteCount,

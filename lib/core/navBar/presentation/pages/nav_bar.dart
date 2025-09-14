@@ -3,9 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:movie_mate_app/features/favourites/presentation/pages/favourite_screen.dart';
-
 import '../../../../features/home/presentation/pages/home_screen.dart';
-import '../../../theme/color_manager.dart';
 import '../manager/nav_bar_cubit.dart';
 
 class NavBarScreen extends StatelessWidget {
@@ -13,6 +11,8 @@ class NavBarScreen extends StatelessWidget {
     HomeScreen(),
     FavouriteScreen(),
   ];
+
+  const NavBarScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -26,11 +26,11 @@ class NavBarScreen extends StatelessWidget {
           ),
           bottomNavigationBar: Container(
             decoration: BoxDecoration(
-              color: ColorManager.darkSurface,
+              color: Theme.of(context).colorScheme.surface,
               borderRadius: BorderRadius.circular(16.r),
               boxShadow: [
                 BoxShadow(
-                  color: Colors.black.withOpacity(0.4),
+                  color: Theme.of(context).colorScheme.shadow.withOpacity(0.4),
                   spreadRadius: 2,
                   blurRadius: 12,
                   offset: const Offset(0, 4),
@@ -40,11 +40,12 @@ class NavBarScreen extends StatelessWidget {
             child: ClipRRect(
               borderRadius: BorderRadius.circular(16.r),
               child: BottomNavigationBar(
-                backgroundColor: ColorManager.darkSurface,
+                backgroundColor: Theme.of(context).colorScheme.surface,
                 currentIndex: index,
                 onTap: (i) => context.read<NavBarCubit>().changeTab(i),
-                selectedItemColor: ColorManager.darkAccent,
-                unselectedItemColor: ColorManager.darkSecondaryText,
+                selectedItemColor: Theme.of(context).colorScheme.primary,
+                unselectedItemColor:
+                    Theme.of(context).colorScheme.onSurface.withOpacity(0.6),
                 selectedFontSize: 11.sp,
                 unselectedFontSize: 11.sp,
                 type: BottomNavigationBarType.fixed,

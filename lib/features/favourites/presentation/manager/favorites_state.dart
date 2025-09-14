@@ -13,7 +13,7 @@ final class FavoritesError extends FavoritesState {
 }
 
 final class FavoritesLoaded extends FavoritesState {
-  final List<MovieHiveModel> favorites; // ✅ Hive models with Uint8List
+  final List<MovieHiveModel> favorites;
   FavoritesLoaded(this.favorites);
 }
 

@@ -19,13 +19,11 @@ class FavoritesRepoImpl implements FavoritesRepo {
   FavoritesRepoImpl({required this.localDataSource, required this.dio});
 
   @override
-  @override
   Future<Either<Failure, void>> addToFavorites(MovieEntity movie) async {
     try {
       Uint8List? imageBytes;
 
       if (movie.movieImage != null && movie.movieImage!.isNotEmpty) {
-        // Only download if URL exists
         final response = await dio.get<List<int>>(
           Constants.imageBaseUrl + movie.movieImage!,
           options: Options(responseType: ResponseType.bytes),
@@ -34,7 +32,7 @@ class FavoritesRepoImpl implements FavoritesRepo {
         imageBytes = Uint8List.fromList(response.data!);
       }
 
-      final hiveModel = movie.toHiveModel(imageBytes); // will be null if no image
+      final hiveModel = movie.toHiveModel(imageBytes);
       await localDataSource.addToFavorites(hiveModel);
 
       return const Right(null);

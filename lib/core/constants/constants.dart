@@ -6,6 +6,9 @@ class Constants {
       'https://api.themoviedb.org/3/search/movie?query=';
   static const getMovieDetailsEndpoint =
       'https://api.themoviedb.org/3/movie/';
-  static const imageBaseUrl = 'https://image.tmdb.org/t/p/original';
+  static const imageBaseUrl = 'https://image.tmdb.org/t/p/w185';
   static const moviesGridViewKey = 'moviesGridKey';
+  static const String moviesCacheBox = "moviesCacheBox";
+  static const String favCacheBox = "favoritesbox";
+
 }

@@ -1,4 +1,3 @@
-// navigation_state.dart
 abstract class NavBarState {}
 
 class NavBarInitial extends NavBarState {}

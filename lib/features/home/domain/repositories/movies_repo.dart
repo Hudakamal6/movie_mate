@@ -1,12 +1,10 @@
-import 'package:movie_mate_app/features/home/domain/entities/movie_entity.dart';
-
 import '../../../../core/error/failure.dart';
 import '../entities/movies_response_entity.dart';
 import 'package:dartz/dartz.dart';
 
-abstract class MoviesRepo  {
+abstract class MoviesRepo {
   Future<Either<Failure, MoviesResponseEntity>> getMovies(int pageNum);
-  Future<Either<Failure, MovieEntity>> getMovieDetails(int movieId);
-  Future<Either<Failure, MoviesResponseEntity>> searchForMovieByMovieName(String movieName);
 
+  Future<Either<Failure, MoviesResponseEntity>> searchForMovieByMovieName(
+      String movieName);
 }

@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:movie_mate_app/features/details/presentation/manager/movies/movie_details_cubit.dart';
-import 'package:movie_mate_app/features/favourites/presentation/manager/favorites_cubit.dart';
 import 'package:movie_mate_app/features/home/domain/entities/movie_entity.dart';
 
 class FavButton extends StatefulWidget {
@@ -23,6 +22,8 @@ class _FavButtonState extends State<FavButton> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return BlocBuilder<MovieDetailsCubit, MovieDetailsState>(
       builder: (context, state) {
         bool isFav = false;
@@ -44,20 +45,22 @@ class _FavButtonState extends State<FavButton> {
           child: Column(
             children: [
               CircleAvatar(
-                backgroundColor: Colors.white12,
+                backgroundColor: theme.colorScheme.background,
                 radius: 24.r,
                 child: Icon(
                   isFav ? Icons.favorite : Icons.favorite_border,
-                  color: isFav ? Colors.red : Colors.white,
+                  color: isFav
+                      ? theme.colorScheme.primary
+                      : theme.colorScheme.onSurface,
                   size: 22.sp,
                 ),
               ),
               SizedBox(height: 6.h),
               Text(
                 "Fav",
-                style: TextStyle(
-                  color: Colors.white70,
+                style: theme.textTheme.bodySmall?.copyWith(
                   fontSize: 12.sp,
+                  color: theme.colorScheme.onSurface.withOpacity(0.7),
                 ),
               ),
             ],

@@ -1,4 +1,3 @@
-import 'package:hive/hive.dart';
 import '../../../../core/models/movie_hive_model.dart';
 
 abstract class FavoritesLocalDataSource {

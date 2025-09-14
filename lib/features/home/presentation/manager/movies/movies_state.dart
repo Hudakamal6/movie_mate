@@ -9,11 +9,17 @@ final class LoadingState extends MoviesState {}
 
 final class SuccessState<T> extends MoviesState {
   final T data;
+
   SuccessState(this.data);
+}
+
+final class MoviesCachedSuccess extends MoviesState {
+  MoviesCachedSuccess();
 }
 
 final class ErrorState extends MoviesState {
   final String error;
+
   ErrorState(this.error);
 }
 

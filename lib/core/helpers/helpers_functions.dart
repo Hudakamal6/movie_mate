@@ -1,8 +1,13 @@
-import 'package:flutter/cupertino.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:movie_mate_app/core/network/netwrok_statues.dart';
 
-import '../constants/constants.dart';
+import '../error/failure.dart';
 
 class HelpersFunctions {
-
+  Future<Failure> checkInternetStatues(NetworkStatus statues , String serverErrorMessage) async {
+    if ( await statues.isConnected) {
+      return (ServerFailure(serverErrorMessage.toString()));
+    } else {
+      return (const NetworkFailure());
+    }
+  }
 }

@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-import '../../../../../core/theme/color_manager.dart';
 import '../../manager/movies/movies_cubit.dart';
 
 class SearchMovieField extends StatefulWidget {
@@ -18,7 +17,7 @@ class _SearchMovieFieldState extends State<SearchMovieField> {
   void _clearSearch() {
     _controller.clear();
     FocusScope.of(context).unfocus();
-    context.read<MoviesCubit>().searchMovies(""); // reset search
+    context.read<MoviesCubit>().searchMovies("");
     setState(() {});
   }
 
@@ -27,15 +26,18 @@ class _SearchMovieFieldState extends State<SearchMovieField> {
     final isTyping = _controller.text.isNotEmpty;
 
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 13.w),
+      padding: EdgeInsets.symmetric(horizontal: 13.w, vertical: 5.h),
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 200),
         decoration: BoxDecoration(
-          color: ColorManager.darkBackground,
+          color: Theme.of(context).colorScheme.surface,
           borderRadius: BorderRadius.circular(16.r),
           boxShadow: [
             BoxShadow(
-              color: ColorManager.darkBackground.withOpacity(0.1),
+              color: Theme.of(context)
+                  .colorScheme
+                  .shadow
+                  .withOpacity(0.1),
               blurRadius: 20,
               offset: const Offset(0, 4),
             ),
@@ -43,21 +45,28 @@ class _SearchMovieFieldState extends State<SearchMovieField> {
         ),
         child: TextField(
           controller: _controller,
-          cursorColor: ColorManager.darkAccent,
+          cursorColor: Theme.of(context).colorScheme.primary,
           style: TextStyle(
-            color: ColorManager.darkPrimaryText,
+            color: Theme.of(context).colorScheme.onSurface,
             fontSize: 13.sp,
           ),
           decoration: InputDecoration(
             hintText: 'Search by movie name...',
-            hintStyle: const TextStyle(color: ColorManager.darkSecondaryText),
+            hintStyle: TextStyle(
+              color: Theme.of(context).hintColor,
+            ),
             border: InputBorder.none,
-            prefixIcon: const Icon(Icons.search, color: ColorManager.darkAccent),
+            prefixIcon: Icon(
+              Icons.search,
+              color: Theme.of(context).colorScheme.primary,
+            ),
             suffixIcon: isTyping
                 ? GestureDetector(
               onTap: _clearSearch,
-              child: const Icon(Icons.close,
-                  color: ColorManager.darkAccent),
+              child: Icon(
+                Icons.close,
+                color: Theme.of(context).colorScheme.primary,
+              ),
             )
                 : null,
             contentPadding: EdgeInsets.symmetric(vertical: 13.h),
