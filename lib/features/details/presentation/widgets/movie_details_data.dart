@@ -21,7 +21,7 @@ class MovieDetailsData extends StatelessWidget {
     final theme = Theme.of(context);
 
     return DraggableScrollableSheet(
-      expand: false,
+      expand: true,
       initialChildSize: 0.92,
       minChildSize: 0.6,
       maxChildSize: 0.95,

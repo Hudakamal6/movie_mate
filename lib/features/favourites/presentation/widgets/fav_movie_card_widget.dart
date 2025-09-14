@@ -60,7 +60,7 @@ class FavMovieCardWidget extends StatelessWidget {
                    SizedBox(height: 6.h),
                   Text(
                     "Released: ${movie.movieReleaseDate}",
-                    style: theme.textTheme.bodySmall?.copyWith(
+                    style: theme.textTheme.bodyMedium?.copyWith(
                       color: theme.colorScheme.onBackground
                           .withOpacity(0.7),
                     ),
@@ -76,7 +76,7 @@ class FavMovieCardWidget extends StatelessWidget {
                        SizedBox(width: 4.w),
                       Text(
                         "${movie.movieRate.toStringAsFixed(1)} / 10",
-                        style: theme.textTheme.bodySmall?.copyWith(
+                        style: theme.textTheme.bodyMedium?.copyWith(
                           color: theme.colorScheme.onSurface,
                         ),
                       ),
@@ -85,6 +85,7 @@ class FavMovieCardWidget extends StatelessWidget {
                         icon: Icon(
                           Icons.favorite,
                           color: theme.colorScheme.primary,
+                          size: 30,
                         ),
                         onPressed: () {
                           context

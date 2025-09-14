@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:movie_mate_app/core/theme/radius_manager.dart';
 
 class EmptyDataWidget extends StatelessWidget {
   final String emptyMessage;
@@ -13,8 +14,14 @@ class EmptyDataWidget extends StatelessWidget {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Image.asset("assets/placeholders/empty_data.png", width: 200.w ,height:  200.h,),
-        Text(
+        ClipRRect(
+          borderRadius: RadiusManager.radius24,
+          child: Container(
+            color: theme.colorScheme.onSecondary,
+              child: Image.asset("assets/placeholders/empty_data.png", width: 200.w ,height:  200.h,)),
+        ),
+        SizedBox(height: 10.h,)
+       , Text(
           emptyMessage,
           style: theme.textTheme.titleLarge,
         ),

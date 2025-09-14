@@ -14,6 +14,8 @@ class CustomErrorWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return SingleChildScrollView(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -29,9 +31,11 @@ class CustomErrorWidget extends StatelessWidget {
           SizedBox(
             height: 10.h,
           ),
-          Text(error.message),
+          Text(error.message,style: theme.textTheme.titleLarge,
+          ),
           error is NetworkFailure
-              ? ElevatedButton(onPressed: onRefresh, child: const Text("Refresh"))
+              ? ElevatedButton(onPressed: onRefresh, child:  const Text("Refresh",
+          ))
               : const SizedBox.shrink()
         ],
       ),

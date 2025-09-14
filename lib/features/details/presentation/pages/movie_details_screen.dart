@@ -35,7 +35,7 @@ class MovieDetailsSheet extends StatelessWidget {
             width: double.infinity,
             height: 300.h,
             padding: PaddingManager.all12,
-            margin: const EdgeInsets.only(top: 8),
+            margin:  EdgeInsets.only(top: 8.h),
             decoration: BoxDecoration(
               color: theme.colorScheme.background,
               borderRadius:RadiusManager.radius8,

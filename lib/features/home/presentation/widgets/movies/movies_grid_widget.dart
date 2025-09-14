@@ -85,6 +85,7 @@ class _MoviesGridState extends State<MoviesGrid> {
                     showModalBottomSheet(
                       context: context,
                       isScrollControlled: true,
+
                       backgroundColor: Colors.transparent,
                       builder: (_) {
                         return BlocProvider.value(
