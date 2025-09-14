@@ -14,25 +14,27 @@ class CustomErrorWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        ClipRRect(
-            borderRadius: RadiusManager.radius50,
-            child: Image.asset(
-              "assets/placeholders/error.jpg",
-              width: 200.w,
-              height: 200.h,
-            )),
-        SizedBox(
-          height: 10.h,
-        ),
-        Text(error.message),
-        error is NetworkFailure
-            ? ElevatedButton(onPressed: onRefresh, child: const Text("Refresh"))
-            : const SizedBox.shrink()
-      ],
+    return SingleChildScrollView(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          ClipRRect(
+              borderRadius: RadiusManager.radius50,
+              child: Image.asset(
+                "assets/placeholders/error.jpg",
+                width: 200.w,
+                height: 200.h,
+              )),
+          SizedBox(
+            height: 10.h,
+          ),
+          Text(error.message),
+          error is NetworkFailure
+              ? ElevatedButton(onPressed: onRefresh, child: const Text("Refresh"))
+              : const SizedBox.shrink()
+        ],
+      ),
     );
   }
 }
